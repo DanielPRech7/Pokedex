@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Pokédex</title>
+    <style>
+        body {
+            background-color: #d32f2f;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .pokedex {
+            background-color: #f44336;
+            width: 600px;
+            border: 8px solid #b71c1c;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 20px #000;
+            position: relative;
+        }
+
+        .pokedex-header {
+            background-color: #212121;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .screen {
+            background-color: #1a237e;
+            color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            min-height: 150px;
+            font-size: 1.1rem;
+        }
+
+        .screen ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .screen li {
+            margin-bottom: 8px;
+        }
+
+        form {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+        }
+
+        button {
+            background-color: #004d40;
+            color: #fff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #00695c;
+        }
+    </style>
+</head>
+<body>
+    <div class="pokedex">
+        <div class="pokedex-header">Pokédex</div>
+
+        <div class="screen">
+            {% if resultado %}
+                {% if resultado.erro %}
+                    <p style="color: #ff8a80;"><strong>{{ resultado.erro }}</strong></p>
+                {% elif resultado.mensagem %}
+                    <p style="color: #b9f6ca;"><strong>{{ resultado.mensagem }}</strong></p>
+                {% else %}
+                    <ul>
+                        {% for chave, valor in resultado.items %}
+                            <li><strong>{{ chave|capfirst }}:</strong> {{ valor }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% else %}
+                <p>Digite o nome de um Pokémon para pesquisar ou catalogar.</p>
+            {% endif %}
+        </div>
+
+        <form method="get" action="{% url 'pesquisar_pokemon' %}">
+            <input type="text" name="nome" placeholder="Ex: Pikachu" required>
+            <button type="submit">Pesquisar</button>
+        </form>
+
+        <form method="get" action="{% url 'catalogar_pokemon' %}">
+            <input type="text" name="nome" placeholder="Ex: Pikachu" required>
+            <button type="submit">Catalogar</button>
+        </form>
+    </div>
+</body>
+</html>

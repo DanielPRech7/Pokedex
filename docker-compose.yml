@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: django_user
+      POSTGRES_PASSWORD: django_pass
+      POSTGRES_DB: pokemons
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  web:
+    build: .
+    container_name: django_web
+    command: >
+      sh -c "
+      python manage.py makemigrations dados_pokemons &&
+      python manage.py migrate &&
+      python manage.py showmigrations &&
+      python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      DEBUG: "1"
+      DJANGO_DB_HOST: db
+      DJANGO_DB_PORT: 5432
+      DJANGO_DB_NAME: pokemons
+      DJANGO_DB_USER: django_user
+      DJANGO_DB_PASSWORD: django_pass
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
