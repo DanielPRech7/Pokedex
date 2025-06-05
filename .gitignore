@@ -87,3 +87,6 @@ dmypy.json
 
 # Windows
 Thumbs.db
+
+#Env decouple
+.env

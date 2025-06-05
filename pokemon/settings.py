@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -76,15 +77,16 @@ WSGI_APPLICATION = 'pokemon.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.postgresql psycopg2',
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pokemons',              
-        'USER': 'django_user',
-        'PASSWORD': 'django_pass',           
-        'HOST': 'db',
-        'PORT': '5432',
+        'NAME': config('DJANGO_DB_NAME'),
+        'USER': config('DJANGO_DB_USER'),
+        'PASSWORD': config('DJANGO_DB_PASSWORD'),
+        'HOST': config('DJANGO_DB_HOST'),
+        'PORT': config('DJANGO_DB_PORT', cast=int),
     }
 }
+
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 
 
